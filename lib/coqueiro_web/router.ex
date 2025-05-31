@@ -8,6 +8,19 @@ defmodule CoqueiroWeb.Router do
     plug :put_root_layout, html: {CoqueiroWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :assign_scope
+  end
+
+  defp assign_scope(conn, _opts) do
+    if id = get_session(conn, :scope_id) do
+      assign(conn, :current_scope, Coqueiro.Scope.for_id(id))
+    else
+      id = System.unique_integer()
+
+      conn
+      |> put_session(:scope_id, id)
+      |> assign(:current_scope, Coqueiro.Scope.for_id(id))
+    end
   end
 
   pipeline :api do
