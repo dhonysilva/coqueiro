@@ -1,3 +1,11 @@
+==> comeonin
+Compiling 3 files (.ex)
+Generated comeonin app
+==> bcrypt_elixir
+mkdir -p "/Users/dhonysilva/estudos/newversion/coqueiro/_build/dev/lib/bcrypt_elixir/priv"
+cc -g -O3 -Wall -Wno-format-truncation -I"/opt/homebrew/Cellar/erlang/27.2.1/lib/erlang/erts-15.2.1/include" -Ic_src -fPIC -shared -dynamiclib -undefined dynamic_lookup c_src/bcrypt_nif.c c_src/blowfish.c -o "/Users/dhonysilva/estudos/newversion/coqueiro/_build/dev/lib/bcrypt_elixir/priv/bcrypt_nif.so"
+Compiling 3 files (.ex)
+Generated bcrypt_elixir app
 # This file is responsible for configuring your application
 # and its dependencies with the aid of the Config module.
 #
@@ -8,8 +16,20 @@
 import Config
 
 config :coqueiro, :scopes,
-  session: [
+  user: [
     default: true,
+    module: Coqueiro.Accounts.Scope,
+    assign_key: :current_scope,
+    access_path: [:user, :id],
+    schema_key: :user_id,
+    schema_type: :id,
+    schema_table: :users,
+    test_data_fixture: Coqueiro.AccountsFixtures,
+    test_login_helper: :register_and_log_in_user
+  ]
+
+config :coqueiro, :scopes,
+  session: [
     module: Coqueiro.Scope,
     assign_key: :current_scope,
     access_path: [:id],
