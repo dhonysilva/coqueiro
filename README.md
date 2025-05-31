@@ -1,4 +1,12 @@
-# Coqueiro
+# Coqueiro 🌴
+
+Is a simple application where I can play with the Release Candidate of Phoenix Framework, 1.8.0-rc.
+
+At this point, I am really interested on learn about the Scopes. Here is the [Guide](https://hexdocs.pm/phoenix/1.8.0-rc.0/Phoenix.Scope.html). As by the release post, "Scopes provide a foundation for building multi-tenant, team-based, or session-isolated apps, slot cleanly into the router and LiveView lifecycle".
+
+I am using this application to walk through the these possibilies.
+
+### Installation
 
 To start your Phoenix server:
 
