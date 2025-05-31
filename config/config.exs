@@ -7,6 +7,18 @@
 # General application configuration
 import Config
 
+config :coqueiro, :scopes,
+  session: [
+    default: true,
+    module: Coqueiro.Scope,
+    assign_key: :current_scope,
+    access_path: [:id],
+    schema_key: :session_id,
+    schema_type: :id,
+    schema_migration_type: :bigint,
+    schema_table: nil
+  ]
+
 config :coqueiro,
   ecto_repos: [Coqueiro.Repo],
   generators: [timestamp_type: :utc_datetime]
