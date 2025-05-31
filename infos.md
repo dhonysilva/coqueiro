@@ -111,3 +111,86 @@ We obtain all the Posts under the `session_id` defined on Scope:
   }
 ]
 ```
+
+## Part 2 - Augumenting Scopes
+
+After generating the User Auth through phx.gen.auth, we have the Accounts.Scope file where we have the for_use function:
+
+```elixir
+# scope.ex
+def for_user(%User{} = user) do
+  %__MODULE__{user: user}
+end
+```
+
+Once I register a user with id = 1,
+
+```elixir
+iex> alias Coqueiro.Repo
+iex> alias Coqueiro.Accounts.User
+iex> user = Repo.get_by!(User, id: 1)
+```
+
+It obtains the %User{} struct and store it on user variable.
+
+```elixir
+#Coqueiro.Accounts.User<
+  __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
+  id: 1,
+  email: "dhony@gmail.com",
+  confirmed_at: ~U[2025-05-31 20:05:35Z],
+  authenticated_at: nil,
+  inserted_at: ~U[2025-05-31 20:05:29Z],
+  updated_at: ~U[2025-05-31 20:05:35Z],
+  ...
+>
+```
+
+Now we can pass the `user` variable to the `for_user` function.
+
+```elixir
+iex> scope = Scope.for_user(user)
+```
+
+Where we obtain the %Scope{} struct:
+
+```elixir
+%Coqueiro.Accounts.Scope{
+  user: #Coqueiro.Accounts.User<
+    __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
+    id: 1,
+    email: "dhony@gmail.com",
+    confirmed_at: ~U[2025-05-31 20:05:35Z],
+    authenticated_at: nil,
+    inserted_at: ~U[2025-05-31 20:05:29Z],
+    updated_at: ~U[2025-05-31 20:05:35Z],
+    ...
+  >
+}
+```
+
+With that, I can destruct some key items.
+
+```elixir
+iex> scope.user
+#Coqueiro.Accounts.User<
+  __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
+  id: 1,
+  email: "dhony@gmail.com",
+  confirmed_at: ~U[2025-05-31 20:05:35Z],
+  authenticated_at: nil,
+  inserted_at: ~U[2025-05-31 20:05:29Z],
+  updated_at: ~U[2025-05-31 20:05:35Z],
+  ...
+>
+```
+
+```elixir
+iex> scope.user.email
+"dhony@gmail.com"
+```
+
+```elixir
+iex> scope.user.confirmed_at
+~U[2025-05-31 20:05:35Z]
+```
