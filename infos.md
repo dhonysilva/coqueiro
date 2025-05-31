@@ -1,4 +1,4 @@
-# Anotations while lerning about Scopes feature
+# Annotations while lerning about Scopes feature
 
 We can obtain the list of Posts under the specified Scope on the IEx terminal:
 
