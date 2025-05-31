@@ -7,6 +7,14 @@ defmodule CoqueiroWeb.PostLive.Index do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
+      <p>Current Scope:</p>
+      <pre><%= inspect assigns.current_scope, pretty: true %></pre>
+
+      <p>user Scope:</p>
+      <pre><%= inspect assigns.current_scope.user, pretty: true %></pre>
+
+      <p>user.email Scope:</p>
+      <pre><%= inspect assigns.current_scope.user.email, pretty: true %></pre>
       <.header>
         Listing Posts
         <:actions>
