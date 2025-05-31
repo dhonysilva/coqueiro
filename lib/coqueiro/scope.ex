@@ -1,5 +1,5 @@
 defmodule Coqueiro.Scope do
-  defstruct id: id
+  defstruct id: nil
 
   def for_id(id) do
     %__MODULE__{id: id}

@@ -1,0 +1,32 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <p>Scope Id: {@current_scope.id}</p>
+
+  <p>current_scope assign:</p>
+  <pre><%= inspect assigns.current_scope, pretty: true %></pre>
+
+  <p>Post assign:</p>
+  <pre><%= inspect assigns.post, pretty: true %></pre>
+
+  <p>Conn assign:</p>
+  <pre><%= inspect assigns.conn.assigns.current_scope, pretty: true %></pre>
+
+  <p>Todo o assigns:</p>
+  <pre><%= inspect assigns, pretty: true %></pre>
+
+  <.header>
+    Post {@post.id}
+    <:subtitle>This is a post record from your database.</:subtitle>
+    <:actions>
+      <.button navigate={~p"/posts"}>
+        <.icon name="hero-arrow-left" />
+      </.button>
+      <.button variant="primary" navigate={~p"/posts/#{@post}/edit?return_to=show"}>
+        <.icon name="hero-pencil-square" /> Edit post
+      </.button>
+    </:actions>
+  </.header>
+
+  <.list>
+    <:item title="Title">{@post.title}</:item>
+  </.list>
+</Layouts.app>
