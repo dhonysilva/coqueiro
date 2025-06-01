@@ -18,7 +18,6 @@ defmodule Coqueiro.Accounts.Organization do
     organization
     |> cast(attrs, [:name, :slug, :active])
     |> validate_required([:name, :slug, :active])
-
-    # |> put_change(:user_id, user_scope.user.id)
+    |> put_change(:id, user_scope.user.id)
   end
 end

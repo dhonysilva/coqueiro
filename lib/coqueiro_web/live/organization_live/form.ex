@@ -43,21 +43,33 @@ defmodule CoqueiroWeb.OrganizationLive.Form do
     socket
     |> assign(:page_title, "Edit Organization")
     |> assign(:organization, organization)
-    |> assign(:form, to_form(Accounts.change_organization(socket.assigns.current_scope, organization)))
+    |> assign(
+      :form,
+      to_form(Accounts.change_organization(socket.assigns.current_scope, organization))
+    )
   end
 
   defp apply_action(socket, :new, _params) do
-    organization = %Organization{user_id: socket.assigns.current_scope.user.id}
+    organization = %Organization{id: socket.assigns.current_scope.user.id}
 
     socket
     |> assign(:page_title, "New Organization")
     |> assign(:organization, organization)
-    |> assign(:form, to_form(Accounts.change_organization(socket.assigns.current_scope, organization)))
+    |> assign(
+      :form,
+      to_form(Accounts.change_organization(socket.assigns.current_scope, organization))
+    )
   end
 
   @impl true
   def handle_event("validate", %{"organization" => organization_params}, socket) do
-    changeset = Accounts.change_organization(socket.assigns.current_scope, socket.assigns.organization, organization_params)
+    changeset =
+      Accounts.change_organization(
+        socket.assigns.current_scope,
+        socket.assigns.organization,
+        organization_params
+      )
+
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -66,7 +78,11 @@ defmodule CoqueiroWeb.OrganizationLive.Form do
   end
 
   defp save_organization(socket, :edit, organization_params) do
-    case Accounts.update_organization(socket.assigns.current_scope, socket.assigns.organization, organization_params) do
+    case Accounts.update_organization(
+           socket.assigns.current_scope,
+           socket.assigns.organization,
+           organization_params
+         ) do
       {:ok, organization} ->
         {:noreply,
          socket

@@ -8,7 +8,7 @@ defmodule CoqueiroWeb.OrganizationLiveTest do
   @update_attrs %{active: false, name: "some updated name", slug: "some updated slug"}
   @invalid_attrs %{active: false, name: nil, slug: nil}
 
-  setup :register_and_log_in_user
+  setup :
 
   defp create_organization(%{scope: scope}) do
     organization = organization_fixture(scope)

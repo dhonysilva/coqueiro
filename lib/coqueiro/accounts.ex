@@ -397,8 +397,6 @@ defmodule Coqueiro.Accounts do
 
   """
   def update_organization(%Scope{} = scope, %Organization{} = organization, attrs) do
-    true = organization.user_id == scope.user.id
-
     with {:ok, organization = %Organization{}} <-
            organization
            |> Organization.changeset(attrs, scope)
@@ -421,8 +419,6 @@ defmodule Coqueiro.Accounts do
 
   """
   def delete_organization(%Scope{} = scope, %Organization{} = organization) do
-    true = organization.user_id == scope.user.id
-
     with {:ok, organization = %Organization{}} <-
            Repo.delete(organization) do
       broadcast(scope, {:deleted, organization})
@@ -440,8 +436,6 @@ defmodule Coqueiro.Accounts do
 
   """
   def change_organization(%Scope{} = scope, %Organization{} = organization, attrs \\ %{}) do
-    true = organization.user_id == scope.user.id
-
     Organization.changeset(organization, attrs, scope)
   end
 end
