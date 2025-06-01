@@ -33,6 +33,7 @@ defmodule Coqueiro.Accounts.Scope do
 
   def for_user(nil), do: nil
 
+  # Put an organization into an existing scope and find the associated membership
   def put_organization(%__MODULE__{user: user} = scope, %Organization{} = organization) do
     membership = get_membership(user, organization)
     %{scope | organization: organization, membership: membership}
@@ -42,6 +43,7 @@ defmodule Coqueiro.Accounts.Scope do
     %{scope | membership: membership}
   end
 
+  # Find the associated membership between user and organization
   def get_membership(%User{id: user_id}, %Organization{id: org_id}) do
     Coqueiro.Repo.get_by(OrganizationMembership, user_id: user_id, organization_id: org_id)
   end

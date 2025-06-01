@@ -195,7 +195,11 @@ iex> scope.user.confirmed_at
 ~U[2025-05-31 20:05:35Z]
 ```
 
-Testing the `OrganizationMembership`.
+### Implementing the Membership to isolate data by user
+
+We created the `put_membership` and `get_membership` as helpers on the Scope module.
+
+In order to test the `OrganizationMembership`, we're going to seed data on database manually with these SQL statement.
 
 SQL statement to associate the user 1 with the organization 01:
 
@@ -204,9 +208,64 @@ insert into organization_memberships(user_id, organization_id, inserted_at, upda
 values(1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 ```
 
+SQL statement to associate the user 2 with the organization 2:
+
+```sql
+insert into organization_memberships(user_id, organization_id, inserted_at, updated_at)
+values(2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 ```
-sqlite> select * from organization_memberships;
+
+Here is the result.
+
+```
+sqlite> sqlite> select * from organization_memberships;
 id  user_id  organization_id  inserted_at          updated_at
 --  -------  ---------------  -------------------  -------------------
 1   1        1                2025-06-01 15:16:28  2025-06-01 15:16:28
+2   2        2                2025-06-01 15:33:43  2025-06-01 15:33:43
+```
+
+When inspecting the assign `current_scope` with these instruction:
+
+```html
+<pre><%= inspect assigns.current_scope, pretty: true  %></pre>
+```
+
+We can see that the membership Scope has been filled, where we can see the scope carry the current user, their organization, and the specific membership that connects them.
+
+```elixir
+%Coqueiro.Accounts.Scope{
+  user: #Coqueiro.Accounts.User<
+    __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
+    id: 1,
+    email: "dhony@gmail.com",
+    confirmed_at: ~U[2025-06-01 02:50:55Z],
+    authenticated_at: ~U[2025-06-01 15:18:58Z],
+    organizations: #Ecto.Association.NotLoaded<association :organizations is not loaded>,
+    organization_memberships: #Ecto.Association.NotLoaded<association :organization_memberships is not loaded>,
+    inserted_at: ~U[2025-06-01 02:50:49Z],
+    updated_at: ~U[2025-06-01 02:50:55Z],
+    ...
+  >,
+  organization: %Coqueiro.Accounts.Organization{
+    __meta__: #Ecto.Schema.Metadata<:loaded, "organizations">,
+    id: 1,
+    name: "Igreja",
+    slug: "igreja",
+    active: true,
+    users: #Ecto.Association.NotLoaded<association :users is not loaded>,
+    inserted_at: ~U[2025-06-01 02:51:20Z],
+    updated_at: ~U[2025-06-01 02:51:20Z]
+  },
+  membership: %Coqueiro.Accounts.OrganizationMembership{
+    __meta__: #Ecto.Schema.Metadata<:loaded, "organization_memberships">,
+    id: 1,
+    user_id: 1,
+    user: #Ecto.Association.NotLoaded<association :user is not loaded>,
+    organization_id: 1,
+    organization: #Ecto.Association.NotLoaded<association :organization is not loaded>,
+    inserted_at: ~U[2025-06-01 15:16:28Z],
+    updated_at: ~U[2025-06-01 15:16:28Z]
+  }
+}
 ```
