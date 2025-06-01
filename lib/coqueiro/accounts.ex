@@ -109,7 +109,8 @@ defmodule Coqueiro.Accounts do
       {:ok, _membership} =
         create_membership(%{
           user_id: user.id,
-          organization_id: organization.id
+          organization_id: organization.id,
+          role: "admin"
         })
 
       user

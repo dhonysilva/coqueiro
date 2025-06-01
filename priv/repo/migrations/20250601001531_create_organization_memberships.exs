@@ -5,6 +5,7 @@ defmodule Coqueiro.Repo.Migrations.CreateOrganizationMemberships do
     create table(:organization_memberships) do
       add :user_id, references(:users, on_delete: :nothing)
       add :organization_id, references(:organizations, on_delete: :nothing)
+      add :role, :string, null: false, default: "member"
 
       timestamps(type: :utc_datetime)
     end
