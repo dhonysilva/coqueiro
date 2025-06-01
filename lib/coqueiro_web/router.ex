@@ -11,6 +11,7 @@ defmodule CoqueiroWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_scope_for_user
+    plug :assign_org_to_scope
   end
 
   pipeline :api do
@@ -56,11 +57,6 @@ defmodule CoqueiroWeb.Router do
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
     end
 
-    live "/organizations", OrganizationLive.Index, :index
-    live "/organizations/new", OrganizationLive.Form, :new
-    live "/organizations/:id", OrganizationLive.Show, :show
-    live "/organizations/:id/edit", OrganizationLive.Form, :edit
-
     post "/users/update-password", UserSessionController, :update_password
   end
 
@@ -68,10 +64,23 @@ defmodule CoqueiroWeb.Router do
     pipe_through [:browser]
 
     live_session :current_user,
-      on_mount: [{CoqueiroWeb.UserAuth, :mount_current_scope}] do
+      on_mount: [
+        {CoqueiroWeb.UserAuth, :mount_current_scope},
+        {CoqueiroWeb.UserAuth, :assign_org_to_scope}
+      ] do
       live "/users/register", UserLive.Registration, :new
       live "/users/log-in", UserLive.Login, :new
       live "/users/log-in/:token", UserLive.Confirmation, :new
+
+      live "/organizations", OrganizationLive.Index, :index
+      live "/organizations/new", OrganizationLive.Form, :new
+      live "/organizations/:id", OrganizationLive.Show, :show
+      live "/organizations/:id/edit", OrganizationLive.Form, :edit
+
+      live "/orgs/:org/posts", PostLive.Index, :index
+      live "/orgs/:org/posts/new", PostLive.Form, :new
+      live "/orgs/:org/posts/:id", PostLive.Show, :show
+      live "/orgs/:org/posts/:id/edit", PostLive.Form, :edit
     end
 
     post "/users/log-in", UserSessionController, :create

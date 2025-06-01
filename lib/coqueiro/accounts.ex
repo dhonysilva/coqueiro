@@ -340,8 +340,9 @@ defmodule Coqueiro.Accounts do
       [%Organization{}, ...]
 
   """
-  def list_organizations(%Scope{} = scope) do
-    Repo.all(from organization in Organization, where: organization.user_id == ^scope.user.id)
+  def list_organizations(%Scope{} = _scope) do
+    # Repo.all(from organization in Organization, where: organization.user_id == ^scope.user.id)
+    Repo.all(Organization)
   end
 
   @doc """
@@ -358,8 +359,16 @@ defmodule Coqueiro.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_organization!(%Scope{} = scope, id) do
-    Repo.get_by!(Organization, id: id, user_id: scope.user.id)
+  def get_organization!(%Scope{} = _scope, slug) do
+    Repo.get_by!(Organization, slug: slug)
+  end
+
+  def get_organization_by_slug(%Scope{} = _scope, slug) do
+    Repo.get_by(Organization, slug: slug)
+  end
+
+  def get_organization_by_slug!(%Scope{} = _scope, slug) do
+    Repo.get_by!(Organization, slug: slug)
   end
 
   @doc """

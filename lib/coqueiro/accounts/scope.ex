@@ -17,8 +17,9 @@ defmodule Coqueiro.Accounts.Scope do
   """
 
   alias Coqueiro.Accounts.User
+  alias Coqueiro.Accounts.Organization
 
-  defstruct user: nil
+  defstruct user: nil, organization: nil
 
   @doc """
   Creates a scope for the given user.
@@ -30,4 +31,8 @@ defmodule Coqueiro.Accounts.Scope do
   end
 
   def for_user(nil), do: nil
+
+  def put_organization(%__MODULE__{} = scope, %Organization{} = organization) do
+    %{scope | organization: organization}
+  end
 end

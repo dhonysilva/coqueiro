@@ -245,6 +245,33 @@ defmodule CoqueiroWeb.UserAuth do
     end
   end
 
+  def on_mount(:assign_org_to_scope, %{"org" => slug}, _session, socket) do
+    socket =
+      case socket.assigns.current_scope do
+        %{organization: nil} = scope ->
+          org = Coqueiro.Accounts.get_organization_by_slug!(socket.assigns.current_scope, slug)
+          Phoenix.Component.assign(socket, :current_scope, Scope.put_organization(scope, org))
+
+        _ ->
+          socket
+      end
+
+    {:cont, socket}
+  end
+
+  def on_mount(:assign_org_to_scope, _params, _session, socket), do: {:cont, socket}
+
+  def assign_org_to_scope(conn, _opts) do
+    current_scope = conn.assigns.current_scope
+
+    if slug = conn.params["org"] do
+      org = Coqueiro.Accounts.get_organization_by_slug!(current_scope, slug)
+      assign(conn, :current_scope, Coqueiro.Accounts.Scope.put_organization(current_scope, org))
+    else
+      conn
+    end
+  end
+
   defp mount_current_scope(socket, session) do
     Phoenix.Component.assign_new(socket, :current_scope, fn ->
       {user, _} =

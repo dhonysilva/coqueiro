@@ -7,6 +7,7 @@ defmodule CoqueiroWeb.OrganizationLive.Index do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
+      <pre><%= inspect assigns.current_scope, pretty: true  %></pre>
       <.header>
         Listing Organizations
         <:actions>
@@ -66,6 +67,9 @@ defmodule CoqueiroWeb.OrganizationLive.Index do
   @impl true
   def handle_info({type, %Coqueiro.Accounts.Organization{}}, socket)
       when type in [:created, :updated, :deleted] do
-    {:noreply, stream(socket, :organizations, Accounts.list_organizations(socket.assigns.current_scope), reset: true)}
+    {:noreply,
+     stream(socket, :organizations, Accounts.list_organizations(socket.assigns.current_scope),
+       reset: true
+     )}
   end
 end
