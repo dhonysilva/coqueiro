@@ -2,6 +2,8 @@ defmodule Coqueiro.Accounts.Organization do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Phoenix.Param, key: :slug}
+
   schema "organizations" do
     field :name, :string
     field :slug, :string
@@ -14,10 +16,9 @@ defmodule Coqueiro.Accounts.Organization do
   end
 
   @doc false
-  def changeset(organization, attrs, user_scope) do
+  def changeset(organization, attrs) do
     organization
     |> cast(attrs, [:name, :slug, :active])
     |> validate_required([:name, :slug, :active])
-    |> put_change(:id, user_scope.user.id)
   end
 end
