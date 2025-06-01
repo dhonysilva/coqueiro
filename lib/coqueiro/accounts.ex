@@ -80,6 +80,42 @@ defmodule Coqueiro.Accounts do
     |> Repo.insert()
   end
 
+  @doc """
+  Registers a user.
+
+  ## Examples
+
+      iex> register_user_with_organization(%{field: value})
+      {:ok, %User{}}
+
+      iex> register_user_with_organization(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def register_user_with_organization(user_attrs) do
+    Repo.transaction(fn ->
+      # Create user
+      {:ok, user} = register_user(user_attrs)
+
+      # Create the Personel organization
+      {:ok, organization} =
+        create_organization(%{
+          name: "Personel",
+          slug: user.email,
+          active: true
+        })
+
+      # Create membership
+      {:ok, _membership} =
+        create_membership(%{
+          user_id: user.id,
+          organization_id: organization.id
+        })
+
+      user
+    end)
+  end
+
   ## Settings
 
   @doc """
@@ -332,6 +368,12 @@ defmodule Coqueiro.Accounts do
     Phoenix.PubSub.broadcast(Coqueiro.PubSub, "user:#{key}:organizations", message)
   end
 
+  def create_membership(attrs) do
+    %OrganizationMembership{}
+    |> OrganizationMembership.changeset(attrs)
+    |> Repo.insert()
+  end
+
   @doc """
   Gets a membership for a user in an organization.
   """
@@ -402,6 +444,24 @@ defmodule Coqueiro.Accounts do
       broadcast(scope, {:created, organization})
       {:ok, organization}
     end
+  end
+
+  @doc """
+  Creates a organization.
+
+  ## Examples
+
+      iex> create_organization(%{field: value})
+      {:ok, %Organization{}}
+
+      iex> create_organization(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_organization(attrs) do
+    %Organization{}
+    |> Organization.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """

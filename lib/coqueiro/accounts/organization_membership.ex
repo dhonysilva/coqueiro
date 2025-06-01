@@ -10,11 +10,10 @@ defmodule Coqueiro.Accounts.OrganizationMembership do
   end
 
   @doc false
-  def changeset(organization_membership, attrs) do
-    organization_membership
-    |> cast(attrs, [])
-    |> validate_required([])
-
-    # |> put_change(:user_id, user_scope.user.id)
+  def changeset(membership, attrs) do
+    membership
+    |> cast(attrs, [:user_id, :organization_id])
+    |> validate_required([:user_id, :organization_id])
+    |> unique_constraint([:user_id, :organization_id])
   end
 end
