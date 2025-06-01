@@ -85,4 +85,19 @@ defmodule Coqueiro.AccountsFixtures do
       set: [inserted_at: dt, authenticated_at: dt]
     )
   end
+
+  @doc """
+  Generate a organization.
+  """
+  def organization_fixture(scope, attrs \\ %{}) do
+    attrs =
+      Enum.into(attrs, %{
+        active: true,
+        name: "some name",
+        slug: "some slug"
+      })
+
+    {:ok, organization} = Coqueiro.Accounts.create_organization(scope, attrs)
+    organization
+  end
 end

@@ -12,23 +12,23 @@ config :coqueiro, :scopes,
     default: true,
     module: Coqueiro.Accounts.Scope,
     assign_key: :current_scope,
-    access_path: [:user, :id],
-    schema_key: :user_id,
-    schema_type: :id,
-    schema_table: :users,
-    test_data_fixture: Coqueiro.AccountsFixtures,
-    test_login_helper: :register_and_log_in_user
-  ]
-
-config :coqueiro, :scopes,
-  session: [
-    module: Coqueiro.Scope,
+    access_path: [:user, :id]
+    # schema_key: :user_id,
+    # schema_type: :id,
+    # schema_table: :users,
+    # test_data_fixture: Coqueiro.AccountsFixtures,
+    # test_login_helper: :register_and_log_in_user
+  ],
+  organization: [
+    module: Coqueiro.Accounts.Scope,
     assign_key: :current_scope,
-    access_path: [:id],
-    schema_key: :session_id,
+    access_path: [:organization, :id],
+    route_prefix: "/orgs/:org",
+    schema_key: :org_id,
     schema_type: :id,
-    schema_migration_type: :bigint,
-    schema_table: nil
+    schema_table: :organizations,
+    test_data_fixture: Coqueiro.AccountsFixtures,
+    test_login_helper: :register_and_log_in_user_with_org
   ]
 
 config :coqueiro,

@@ -46,7 +46,7 @@ defmodule CoqueiroWeb.PostLive.Form do
   end
 
   defp apply_action(socket, :new, _params) do
-    post = %Post{user_id: socket.assigns.current_scope.user.id}
+    post = %Post{org_id: socket.assigns.current_scope.organization.id}
 
     socket
     |> assign(:page_title, "New Post")
@@ -94,6 +94,6 @@ defmodule CoqueiroWeb.PostLive.Form do
     end
   end
 
-  defp return_path(_scope, "index", _post), do: ~p"/posts"
-  defp return_path(_scope, "show", post), do: ~p"/posts/#{post}"
+  defp return_path(scope, "index", _post), do: ~p"/orgs/#{scope.organization}/posts"
+  defp return_path(scope, "show", post), do: ~p"/orgs/#{scope.organization}/posts/#{post}"
 end

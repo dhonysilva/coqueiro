@@ -8,7 +8,7 @@ defmodule CoqueiroWeb.PostLiveTest do
   @update_attrs %{title: "some updated title", body: "some updated body"}
   @invalid_attrs %{title: nil, body: nil}
 
-  setup :register_and_log_in_user
+  setup :register_and_log_in_user_with_org
 
   defp create_post(%{scope: scope}) do
     post = post_fixture(scope)
@@ -19,21 +19,21 @@ defmodule CoqueiroWeb.PostLiveTest do
   describe "Index" do
     setup [:create_post]
 
-    test "lists all posts", %{conn: conn, post: post} do
-      {:ok, _index_live, html} = live(conn, ~p"/posts")
+    test "lists all posts", %{conn: conn, post: post, scope: scope} do
+      {:ok, _index_live, html} = live(conn, ~p"/orgs/#{scope.organization}/posts")
 
       assert html =~ "Listing Posts"
       assert html =~ post.title
     end
 
-    test "saves new post", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/posts")
+    test "saves new post", %{conn: conn, scope: scope} do
+      {:ok, index_live, _html} = live(conn, ~p"/orgs/#{scope.organization}/posts")
 
       assert {:ok, form_live, _} =
                index_live
                |> element("a", "New Post")
                |> render_click()
-               |> follow_redirect(conn, ~p"/posts/new")
+               |> follow_redirect(conn, ~p"/orgs/#{scope.organization}/posts/new")
 
       assert render(form_live) =~ "New Post"
 
@@ -45,21 +45,21 @@ defmodule CoqueiroWeb.PostLiveTest do
                form_live
                |> form("#post-form", post: @create_attrs)
                |> render_submit()
-               |> follow_redirect(conn, ~p"/posts")
+               |> follow_redirect(conn, ~p"/orgs/#{scope.organization}/posts")
 
       html = render(index_live)
       assert html =~ "Post created successfully"
       assert html =~ "some title"
     end
 
-    test "updates post in listing", %{conn: conn, post: post} do
-      {:ok, index_live, _html} = live(conn, ~p"/posts")
+    test "updates post in listing", %{conn: conn, post: post, scope: scope} do
+      {:ok, index_live, _html} = live(conn, ~p"/orgs/#{scope.organization}/posts")
 
       assert {:ok, form_live, _html} =
                index_live
                |> element("#posts-#{post.id} a", "Edit")
                |> render_click()
-               |> follow_redirect(conn, ~p"/posts/#{post}/edit")
+               |> follow_redirect(conn, ~p"/orgs/#{scope.organization}/posts/#{post}/edit")
 
       assert render(form_live) =~ "Edit Post"
 
@@ -71,15 +71,15 @@ defmodule CoqueiroWeb.PostLiveTest do
                form_live
                |> form("#post-form", post: @update_attrs)
                |> render_submit()
-               |> follow_redirect(conn, ~p"/posts")
+               |> follow_redirect(conn, ~p"/orgs/#{scope.organization}/posts")
 
       html = render(index_live)
       assert html =~ "Post updated successfully"
       assert html =~ "some updated title"
     end
 
-    test "deletes post in listing", %{conn: conn, post: post} do
-      {:ok, index_live, _html} = live(conn, ~p"/posts")
+    test "deletes post in listing", %{conn: conn, post: post, scope: scope} do
+      {:ok, index_live, _html} = live(conn, ~p"/orgs/#{scope.organization}/posts")
 
       assert index_live |> element("#posts-#{post.id} a", "Delete") |> render_click()
       refute has_element?(index_live, "#posts-#{post.id}")
@@ -89,21 +89,21 @@ defmodule CoqueiroWeb.PostLiveTest do
   describe "Show" do
     setup [:create_post]
 
-    test "displays post", %{conn: conn, post: post} do
-      {:ok, _show_live, html} = live(conn, ~p"/posts/#{post}")
+    test "displays post", %{conn: conn, post: post, scope: scope} do
+      {:ok, _show_live, html} = live(conn, ~p"/orgs/#{scope.organization}/posts/#{post}")
 
       assert html =~ "Show Post"
       assert html =~ post.title
     end
 
-    test "updates post and returns to show", %{conn: conn, post: post} do
-      {:ok, show_live, _html} = live(conn, ~p"/posts/#{post}")
+    test "updates post and returns to show", %{conn: conn, post: post, scope: scope} do
+      {:ok, show_live, _html} = live(conn, ~p"/orgs/#{scope.organization}/posts/#{post}")
 
       assert {:ok, form_live, _} =
                show_live
                |> element("a", "Edit")
                |> render_click()
-               |> follow_redirect(conn, ~p"/posts/#{post}/edit?return_to=show")
+               |> follow_redirect(conn, ~p"/orgs/#{scope.organization}/posts/#{post}/edit?return_to=show")
 
       assert render(form_live) =~ "Edit Post"
 
@@ -115,7 +115,7 @@ defmodule CoqueiroWeb.PostLiveTest do
                form_live
                |> form("#post-form", post: @update_attrs)
                |> render_submit()
-               |> follow_redirect(conn, ~p"/posts/#{post}")
+               |> follow_redirect(conn, ~p"/orgs/#{scope.organization}/posts/#{post}")
 
       html = render(show_live)
       assert html =~ "Post updated successfully"

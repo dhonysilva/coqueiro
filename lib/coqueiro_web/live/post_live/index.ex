@@ -7,18 +7,11 @@ defmodule CoqueiroWeb.PostLive.Index do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <p>Current Scope:</p>
-      <pre><%= inspect assigns.current_scope, pretty: true %></pre>
-
-      <p>user Scope:</p>
-      <pre><%= inspect assigns.current_scope.user, pretty: true %></pre>
-
-      <p>user.email Scope:</p>
-      <pre><%= inspect assigns.current_scope.user.email, pretty: true %></pre>
+      <pre><%= inspect assigns.current_scope, pretty: true  %></pre>
       <.header>
         Listing Posts
         <:actions>
-          <.button variant="primary" navigate={~p"/posts/new"}>
+          <.button variant="primary" navigate={~p"/orgs/#{@current_scope.organization}/posts/new"}>
             <.icon name="hero-plus" /> New Post
           </.button>
         </:actions>
@@ -27,15 +20,17 @@ defmodule CoqueiroWeb.PostLive.Index do
       <.table
         id="posts"
         rows={@streams.posts}
-        row_click={fn {_id, post} -> JS.navigate(~p"/posts/#{post}") end}
+        row_click={
+          fn {_id, post} -> JS.navigate(~p"/orgs/#{@current_scope.organization}/posts/#{post}") end
+        }
       >
         <:col :let={{_id, post}} label="Title">{post.title}</:col>
         <:col :let={{_id, post}} label="Body">{post.body}</:col>
         <:action :let={{_id, post}}>
           <div class="sr-only">
-            <.link navigate={~p"/posts/#{post}"}>Show</.link>
+            <.link navigate={~p"/orgs/#{@current_scope.organization}/posts/#{post}"}>Show</.link>
           </div>
-          <.link navigate={~p"/posts/#{post}/edit"}>Edit</.link>
+          <.link navigate={~p"/orgs/#{@current_scope.organization}/posts/#{post}/edit"}>Edit</.link>
         </:action>
         <:action :let={{id, post}}>
           <.link

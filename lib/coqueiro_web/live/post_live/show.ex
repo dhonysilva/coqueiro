@@ -7,14 +7,18 @@ defmodule CoqueiroWeb.PostLive.Show do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
+      <pre><%= inspect assigns.current_scope, pretty: true  %></pre>
       <.header>
         Post {@post.id}
         <:subtitle>This is a post record from your database.</:subtitle>
         <:actions>
-          <.button navigate={~p"/posts"}>
+          <.button navigate={~p"/orgs/#{@current_scope.organization}/posts"}>
             <.icon name="hero-arrow-left" />
           </.button>
-          <.button variant="primary" navigate={~p"/posts/#{@post}/edit?return_to=show"}>
+          <.button
+            variant="primary"
+            navigate={~p"/orgs/#{@current_scope.organization}/posts/#{@post}/edit?return_to=show"}
+          >
             <.icon name="hero-pencil-square" /> Edit post
           </.button>
         </:actions>
@@ -55,7 +59,7 @@ defmodule CoqueiroWeb.PostLive.Show do
     {:noreply,
      socket
      |> put_flash(:error, "The current post was deleted.")
-     |> push_navigate(to: ~p"/posts")}
+     |> push_navigate(to: ~p"/orgs/#{socket.assigns.current_scope.organization}/posts")}
   end
 
   def handle_info({type, %Coqueiro.Blog.Post{}}, socket)

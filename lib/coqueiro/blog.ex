@@ -20,15 +20,15 @@ defmodule Coqueiro.Blog do
 
   """
   def subscribe_posts(%Scope{} = scope) do
-    key = scope.user.id
+    key = scope.organization.id
 
-    Phoenix.PubSub.subscribe(Coqueiro.PubSub, "user:#{key}:posts")
+    Phoenix.PubSub.subscribe(Coqueiro.PubSub, "organization:#{key}:posts")
   end
 
   defp broadcast(%Scope{} = scope, message) do
-    key = scope.user.id
+    key = scope.organization.id
 
-    Phoenix.PubSub.broadcast(Coqueiro.PubSub, "user:#{key}:posts", message)
+    Phoenix.PubSub.broadcast(Coqueiro.PubSub, "organization:#{key}:posts", message)
   end
 
   @doc """
@@ -41,7 +41,7 @@ defmodule Coqueiro.Blog do
 
   """
   def list_posts(%Scope{} = scope) do
-    Repo.all(from post in Post, where: post.user_id == ^scope.user.id)
+    Repo.all(from post in Post, where: post.org_id == ^scope.organization.id)
   end
 
   @doc """
@@ -59,7 +59,7 @@ defmodule Coqueiro.Blog do
 
   """
   def get_post!(%Scope{} = scope, id) do
-    Repo.get_by!(Post, id: id, user_id: scope.user.id)
+    Repo.get_by!(Post, id: id, org_id: scope.organization.id)
   end
 
   @doc """
@@ -97,7 +97,7 @@ defmodule Coqueiro.Blog do
 
   """
   def update_post(%Scope{} = scope, %Post{} = post, attrs) do
-    true = post.user_id == scope.user.id
+    true = post.org_id == scope.organization.id
 
     with {:ok, post = %Post{}} <-
            post
@@ -121,7 +121,7 @@ defmodule Coqueiro.Blog do
 
   """
   def delete_post(%Scope{} = scope, %Post{} = post) do
-    true = post.user_id == scope.user.id
+    true = post.org_id == scope.organization.id
 
     with {:ok, post = %Post{}} <-
            Repo.delete(post) do
@@ -140,7 +140,7 @@ defmodule Coqueiro.Blog do
 
   """
   def change_post(%Scope{} = scope, %Post{} = post, attrs \\ %{}) do
-    true = post.user_id == scope.user.id
+    true = post.org_id == scope.organization.id
 
     Post.changeset(post, attrs, scope)
   end
