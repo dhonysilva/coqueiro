@@ -18,6 +18,17 @@ config :coqueiro, :scopes,
     # schema_table: :users,
     # test_data_fixture: Coqueiro.AccountsFixtures,
     # test_login_helper: :register_and_log_in_user
+  ],
+  organization: [
+    module: Coqueiro.Accounts.Scope,
+    assign_key: :current_scope,
+    access_path: [:organization, :id],
+    route_prefix: "/orgs/:org",
+    schema_key: :org_id,
+    schema_type: :id,
+    schema_table: :organizations,
+    test_data_fixture: Coqueiro.AccountsFixtures,
+    test_login_helper: :register_and_log_in_user_with_org
   ]
 
 config :coqueiro,

@@ -9,6 +9,11 @@ defmodule Coqueiro.Accounts.User do
     field :confirmed_at, :utc_datetime
     field :authenticated_at, :utc_datetime, virtual: true
 
+    many_to_many :organizations, Coqueiro.Accounts.Organization,
+      join_through: Coqueiro.Accounts.OrganizationMembership
+
+    has_many :organization_memberships, Coqueiro.Accounts.OrganizationMembership
+
     timestamps(type: :utc_datetime)
   end
 
