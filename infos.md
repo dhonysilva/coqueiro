@@ -197,6 +197,11 @@ iex> scope.user.confirmed_at
 
 ### Implementing the Membership to isolate data by user
 
+Here is our Relationship Diagram.
+
+![Relationship Diagram](priv/static/images/relationship-diagram.png)
+
+
 We created the `put_membership` and `get_membership` as helpers on the Scope module.
 
 In order to test the `OrganizationMembership`, we're going to seed data on database manually with these SQL statement.
@@ -271,5 +276,7 @@ We can see that the membership Scope has been filled, where we can see the scope
 ```
 
 Now all incoming requests under `/orgs/:org/posts` will have `conn.assigns.current_scope` containing the `user`, `organization`, and `membership`.
+
+Each request know the curret `%Organization{}`, `%User{}` and `%OrganizationMembership{}` all in `current_scope`.
 
 May I confirm the same to `socket.assigns.current_scope`?
