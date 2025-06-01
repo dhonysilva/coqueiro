@@ -194,3 +194,19 @@ iex> scope.user.email
 iex> scope.user.confirmed_at
 ~U[2025-05-31 20:05:35Z]
 ```
+
+Testing the `OrganizationMembership`.
+
+SQL statement to associate the user 1 with the organization 01:
+
+```sql
+insert into organization_memberships(user_id, organization_id, inserted_at, updated_at)
+values(1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+```
+
+```
+sqlite> select * from organization_memberships;
+id  user_id  organization_id  inserted_at          updated_at
+--  -------  ---------------  -------------------  -------------------
+1   1        1                2025-06-01 15:16:28  2025-06-01 15:16:28
+```
