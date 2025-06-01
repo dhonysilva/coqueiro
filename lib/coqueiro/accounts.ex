@@ -307,6 +307,7 @@ defmodule Coqueiro.Accounts do
   end
 
   alias Coqueiro.Accounts.Organization
+  alias Coqueiro.Accounts.OrganizationMembership
   alias Coqueiro.Accounts.Scope
 
   @doc """
@@ -329,6 +330,16 @@ defmodule Coqueiro.Accounts do
     key = scope.user.id
 
     Phoenix.PubSub.broadcast(Coqueiro.PubSub, "user:#{key}:organizations", message)
+  end
+
+  @doc """
+  Gets a membership for a user in an organization.
+  """
+  def get_membership(%User{} = user, %Organization{} = organization) do
+    Repo.one(
+      from m in OrganizationMembership,
+        where: m.user_id == ^user.id and m.organization_id == ^organization.id
+    )
   end
 
   @doc """

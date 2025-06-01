@@ -269,3 +269,7 @@ We can see that the membership Scope has been filled, where we can see the scope
   }
 }
 ```
+
+Now all incoming requests under `/orgs/:org/posts` will have `conn.assigns.current_scope` containing the `user`, `organization`, and `membership`.
+
+May I confirm the same to `socket.assigns.current_scope`?
