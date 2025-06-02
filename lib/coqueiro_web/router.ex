@@ -72,15 +72,16 @@ defmodule CoqueiroWeb.Router do
       live "/users/log-in", UserLive.Login, :new
       live "/users/log-in/:token", UserLive.Confirmation, :new
 
-      live "/organizations", OrganizationLive.Index, :index
-      live "/organizations/new", OrganizationLive.Form, :new
-      live "/organizations/:id", OrganizationLive.Show, :show
-      live "/organizations/:id/edit", OrganizationLive.Form, :edit
+      live "/orgs", OrganizationLive.Index, :index
+      live "/orgs/new", OrganizationLive.Form, :new
+      live "/orgs/:id", OrganizationLive.Show, :show
+      live "/orgs/:id/edit", OrganizationLive.Form, :edit
 
-      live "/orgs/:org/posts", PostLive.Index, :index
-      live "/orgs/:org/posts/new", PostLive.Form, :new
-      live "/orgs/:org/posts/:id", PostLive.Show, :show
-      live "/orgs/:org/posts/:id/edit", PostLive.Form, :edit
+      live "/orgs/:id", OrganizationLive.Show, :show
+      live "/orgs/:id/posts", PostLive.Index, :index
+      live "/orgs/:id/posts/new", PostLive.Form, :new
+      live "/orgs/:id/posts/:id", PostLive.Show, :show
+      live "/orgs/:id/posts/:id/edit", PostLive.Form, :edit
     end
 
     post "/users/log-in", UserSessionController, :create

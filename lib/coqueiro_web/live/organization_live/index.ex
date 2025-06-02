@@ -11,7 +11,7 @@ defmodule CoqueiroWeb.OrganizationLive.Index do
       <.header>
         Listing Organizations
         <:actions>
-          <.button variant="primary" navigate={~p"/organizations/new"}>
+          <.button variant="primary" navigate={~p"/orgs/new"}>
             <.icon name="hero-plus" /> New Organization
           </.button>
         </:actions>
@@ -20,16 +20,16 @@ defmodule CoqueiroWeb.OrganizationLive.Index do
       <.table
         id="organizations"
         rows={@streams.organizations}
-        row_click={fn {_id, organization} -> JS.navigate(~p"/organizations/#{organization}") end}
+        row_click={fn {_id, organization} -> JS.navigate(~p"/orgs/#{organization}") end}
       >
         <:col :let={{_id, organization}} label="Name">{organization.name}</:col>
         <:col :let={{_id, organization}} label="Slug">{organization.slug}</:col>
         <:col :let={{_id, organization}} label="Active">{organization.active}</:col>
         <:action :let={{_id, organization}}>
           <div class="sr-only">
-            <.link navigate={~p"/organizations/#{organization}"}>Show</.link>
+            <.link navigate={~p"/orgs/#{organization}"}>Show</.link>
           </div>
-          <.link navigate={~p"/organizations/#{organization}/edit"}>Edit</.link>
+          <.link navigate={~p"/orgs/#{organization}/edit"}>Edit</.link>
         </:action>
         <:action :let={{id, organization}}>
           <.link

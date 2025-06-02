@@ -245,10 +245,10 @@ defmodule CoqueiroWeb.UserAuth do
     end
   end
 
-  def on_mount(:assign_org_to_scope, %{"org" => slug}, _session, socket) do
+  def on_mount(:assign_org_to_scope, %{"id" => id}, _session, socket) do
     current_scope = socket.assigns.current_scope
 
-    case Coqueiro.Accounts.get_organization_by_slug!(current_scope, slug) do
+    case Coqueiro.Accounts.get_organization!(current_scope, id) do
       %Coqueiro.Accounts.Organization{} = org ->
         if membership = Coqueiro.Accounts.get_membership(current_scope.user, org) do
           new_scope =
@@ -261,14 +261,14 @@ defmodule CoqueiroWeb.UserAuth do
           {:halt,
            socket
            |> put_flash(:error, "You don't have access to that organization")
-           |> redirect(to: ~p"/organizations")}
+           |> redirect(to: ~p"/orgs")}
         end
 
       _ ->
         {:halt,
          socket
          |> put_flash(:error, "Organization not found")
-         |> redirect(to: ~p"/organizations")}
+         |> redirect(to: ~p"/orgs")}
     end
   end
 
@@ -277,8 +277,8 @@ defmodule CoqueiroWeb.UserAuth do
   def assign_org_to_scope(conn, _opts) do
     current_scope = conn.assigns.current_scope
 
-    if slug = conn.params["org"] do
-      org = Coqueiro.Accounts.get_organization_by_slug!(current_scope, slug)
+    if id = conn.params["org"] do
+      org = Coqueiro.Accounts.get_organization!(current_scope, id)
       assign(conn, :current_scope, Coqueiro.Accounts.Scope.put_organization(current_scope, org))
     else
       conn

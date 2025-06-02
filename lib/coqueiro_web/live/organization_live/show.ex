@@ -12,13 +12,10 @@ defmodule CoqueiroWeb.OrganizationLive.Show do
         Organization {@organization.id}
         <:subtitle>This is a organization record from your database.</:subtitle>
         <:actions>
-          <.button navigate={~p"/organizations"}>
+          <.button navigate={~p"/orgs"}>
             <.icon name="hero-arrow-left" />
           </.button>
-          <.button
-            variant="primary"
-            navigate={~p"/organizations/#{@organization}/edit?return_to=show"}
-          >
+          <.button variant="primary" navigate={~p"/orgs/#{@organization}/edit?return_to=show"}>
             <.icon name="hero-pencil-square" /> Edit organization
           </.button>
         </:actions>
@@ -42,7 +39,10 @@ defmodule CoqueiroWeb.OrganizationLive.Show do
     {:ok,
      socket
      |> assign(:page_title, "Show Organization")
-     |> assign(:organization, Accounts.get_organization!(socket.assigns.current_scope, id))}
+     |> assign(
+       :organization,
+       Accounts.get_organization!(socket.assigns.current_scope, id)
+     )}
   end
 
   @impl true
@@ -60,7 +60,7 @@ defmodule CoqueiroWeb.OrganizationLive.Show do
     {:noreply,
      socket
      |> put_flash(:error, "The current organization was deleted.")
-     |> push_navigate(to: ~p"/organizations")}
+     |> push_navigate(to: ~p"/orgs")}
   end
 
   def handle_info({type, %Coqueiro.Accounts.Organization{}}, socket)
