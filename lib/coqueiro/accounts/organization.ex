@@ -2,8 +2,6 @@ defmodule Coqueiro.Accounts.Organization do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Phoenix.Param, key: :slug}
-
   schema "organizations" do
     field :name, :string
     field :slug, :string

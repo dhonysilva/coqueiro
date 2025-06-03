@@ -413,8 +413,9 @@ defmodule Coqueiro.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_organization!(%Scope{} = _scope, slug) do
-    Repo.get_by!(Organization, slug: slug)
+  def get_organization!(%Scope{} = _scope, id) do
+    Repo.get_by!(Organization, id: id)
+    |> Repo.preload(users: [organization_memberships: []])
   end
 
   def get_organization_by_slug(%Scope{} = _scope, slug) do
@@ -423,6 +424,11 @@ defmodule Coqueiro.Accounts do
 
   def get_organization_by_slug!(%Scope{} = _scope, slug) do
     Repo.get_by!(Organization, slug: slug)
+  end
+
+  def get_organization_with_members!(%Scope{} = scope, id) do
+    Repo.get_by!(Organization, id: id, id: scope.organization.id)
+    |> Repo.preload(organization_memberships: [user: []])
   end
 
   @doc """
