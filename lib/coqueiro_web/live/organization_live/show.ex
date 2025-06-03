@@ -26,6 +26,15 @@ defmodule CoqueiroWeb.OrganizationLive.Show do
         <:item title="Slug">{@organization.slug}</:item>
         <:item title="Active">{@organization.active}</:item>
       </.list>
+
+      <p>Users nessa Organization:</p>
+
+      <ul>
+        <%= for user <- @organization.users do %>
+          <li>User Id: {user.id}</li>
+          <li>User Name: {user.email}</li>
+        <% end %>
+      </ul>
     </Layouts.app>
     """
   end

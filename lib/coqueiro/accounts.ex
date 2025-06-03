@@ -415,6 +415,7 @@ defmodule Coqueiro.Accounts do
   """
   def get_organization!(%Scope{} = _scope, id) do
     Repo.get_by!(Organization, id: id)
+    |> Repo.preload(users: [organization_memberships: []])
   end
 
   def get_organization_by_slug(%Scope{} = _scope, slug) do
